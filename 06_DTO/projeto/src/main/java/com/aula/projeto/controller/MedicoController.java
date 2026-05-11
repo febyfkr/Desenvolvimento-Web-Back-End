@@ -1,9 +1,21 @@
 package com.aula.projeto.controller;
 
-import com.aula.projeto.entity.Medico;
-import com.aula.projeto.service.MedicoService;
-import org.springframework.web.bind.annotation.*;
 import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.aula.projeto.dto.MedicoRequestDTO;
+import com.aula.projeto.dto.MedicoResponseDTO;
+import com.aula.projeto.service.MedicoService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/medicos")
@@ -14,18 +26,28 @@ public class MedicoController {
         this.service = service;
     }
 
+    @PostMapping
+    public MedicoResponseDTO salvar(@RequestBody @Valid MedicoRequestDTO dto) {
+        return service.salvar(dto);
+    }
+
     @GetMapping
-    public List<Medico> listarTodos() { return service.listarTodos(); }
+    public List<MedicoResponseDTO> listarTodos() {
+        return service.listarTodos();
+    }
 
     @GetMapping("/{id}")
-    public Medico buscarPorId(@PathVariable Long id) { return service.buscarPorId(id).orElse(null); }
-
-    @PostMapping
-    public Medico salvar(@RequestBody Medico medico) { return service.salvar(medico); }
+    public MedicoResponseDTO buscarPorId(@PathVariable Long id) {
+        return service.buscarPorId(id);
+    }
 
     @PutMapping("/{id}")
-    public Medico atualizar(@PathVariable Long id, @RequestBody Medico medico) { return service.atualizar(id, medico); }
+    public MedicoResponseDTO atualizar(@PathVariable Long id, @RequestBody @Valid MedicoRequestDTO dto) {
+        return service.atualizar(id, dto);
+    }
 
     @DeleteMapping("/{id}")
-    public boolean excluir(@PathVariable Long id) { return service.excluir(id); }
+    public String excluir(@PathVariable Long id) {
+        return service.excluir(id);
+    }
 }

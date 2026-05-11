@@ -1,9 +1,21 @@
 package com.aula.projeto.controller;
 
-import com.aula.projeto.entity.Prontuario;
-import com.aula.projeto.service.ProntuarioService;
-import org.springframework.web.bind.annotation.*;
 import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.aula.projeto.dto.ProntuarioRequestDTO;
+import com.aula.projeto.dto.ProntuarioResponseDTO;
+import com.aula.projeto.service.ProntuarioService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/prontuarios")
@@ -14,18 +26,28 @@ public class ProntuarioController {
         this.service = service;
     }
 
+    @PostMapping
+    public ProntuarioResponseDTO salvar(@RequestBody @Valid ProntuarioRequestDTO dto) {
+        return service.salvar(dto);
+    }
+
     @GetMapping
-    public List<Prontuario> listarTodos() { return service.listarTodos(); }
+    public List<ProntuarioResponseDTO> listarTodos() {
+        return service.listarTodos();
+    }
 
     @GetMapping("/{id}")
-    public Prontuario buscarPorId(@PathVariable Long id) { return service.buscarPorId(id).orElse(null); }
-
-    @PostMapping
-    public Prontuario salvar(@RequestBody Prontuario prontuario) { return service.salvar(prontuario); }
+    public ProntuarioResponseDTO buscarPorId(@PathVariable Long id) {
+        return service.buscarPorId(id);
+    }
 
     @PutMapping("/{id}")
-    public Prontuario atualizar(@PathVariable Long id, @RequestBody Prontuario prontuario) { return service.atualizar(id, prontuario); }
+    public ProntuarioResponseDTO atualizar(@PathVariable Long id, @RequestBody @Valid ProntuarioRequestDTO dto) {
+        return service.atualizar(id, dto);
+    }
 
     @DeleteMapping("/{id}")
-    public boolean excluir(@PathVariable Long id) { return service.excluir(id); }
+    public String excluir(@PathVariable Long id) {
+        return service.excluir(id);
+    }
 }

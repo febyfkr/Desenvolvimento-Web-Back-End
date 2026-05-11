@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aula.projeto.entity.Paciente;
+import com.aula.projeto.dto.PacienteRequestDTO;
+import com.aula.projeto.dto.PacienteResponseDTO;
 import com.aula.projeto.service.PacienteService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/pacientes")
@@ -23,18 +26,28 @@ public class PacienteController {
         this.service = service;
     }
 
+    @PostMapping
+    public PacienteResponseDTO salvar(@RequestBody @Valid PacienteRequestDTO dto) {
+        return service.salvar(dto);
+    }
+
     @GetMapping
-    public List<Paciente> listarTodos() { return service.listarTodos(); }
+    public List<PacienteResponseDTO> listarTodos() {
+        return service.listarTodos();
+    }
 
     @GetMapping("/{id}")
-    public Paciente buscarPorId(@PathVariable Long id) { return service.buscarPorId(id).orElse(null); }
-
-    @PostMapping
-    public Paciente salvar(@RequestBody Paciente paciente) { return service.salvar(paciente); }
+    public PacienteResponseDTO buscarPorId(@PathVariable Long id) {
+        return service.buscarPorId(id);
+    }
 
     @PutMapping("/{id}")
-    public Paciente atualizar(@PathVariable Long id, @RequestBody Paciente paciente) { return service.atualizar(id, paciente); }
+    public PacienteResponseDTO atualizar(@PathVariable Long id, @RequestBody @Valid PacienteRequestDTO dto) {
+        return service.atualizar(id, dto);
+    }
 
     @DeleteMapping("/{id}")
-    public boolean excluir(@PathVariable Long id) { return service.excluir(id); }
+    public String excluir(@PathVariable Long id) {
+        return service.excluir(id);
+    }
 }

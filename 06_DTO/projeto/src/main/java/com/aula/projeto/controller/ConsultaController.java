@@ -1,9 +1,21 @@
 package com.aula.projeto.controller;
 
-import com.aula.projeto.entity.Consulta;
-import com.aula.projeto.service.ConsultaService;
-import org.springframework.web.bind.annotation.*;
 import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.aula.projeto.dto.ConsultaRequestDTO;
+import com.aula.projeto.dto.ConsultaResponseDTO;
+import com.aula.projeto.service.ConsultaService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/consultas")
@@ -14,18 +26,28 @@ public class ConsultaController {
         this.service = service;
     }
 
+    @PostMapping
+    public ConsultaResponseDTO salvar(@RequestBody @Valid ConsultaRequestDTO dto) {
+        return service.salvar(dto);
+    }
+
     @GetMapping
-    public List<Consulta> listarTodos() { return service.listarTodos(); }
+    public List<ConsultaResponseDTO> listarTodos() {
+        return service.listarTodos();
+    }
 
     @GetMapping("/{id}")
-    public Consulta buscarPorId(@PathVariable Long id) { return service.buscarPorId(id).orElse(null); }
-
-    @PostMapping
-    public Consulta salvar(@RequestBody Consulta consulta) { return service.salvar(consulta); }
+    public ConsultaResponseDTO buscarPorId(@PathVariable Long id) {
+        return service.buscarPorId(id);
+    }
 
     @PutMapping("/{id}")
-    public Consulta atualizar(@PathVariable Long id, @RequestBody Consulta consulta) { return service.atualizar(id, consulta); }
+    public ConsultaResponseDTO atualizar(@PathVariable Long id, @RequestBody @Valid ConsultaRequestDTO dto) {
+        return service.atualizar(id, dto);
+    }
 
     @DeleteMapping("/{id}")
-    public boolean excluir(@PathVariable Long id) { return service.excluir(id); }
+    public String excluir(@PathVariable Long id) {
+        return service.excluir(id);
+    }
 }

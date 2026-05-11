@@ -1,9 +1,21 @@
 package com.aula.projeto.controller;
 
-import com.aula.projeto.entity.Receita;
-import com.aula.projeto.service.ReceitaService;
-import org.springframework.web.bind.annotation.*;
 import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.aula.projeto.dto.ReceitaRequestDTO;
+import com.aula.projeto.dto.ReceitaResponseDTO;
+import com.aula.projeto.service.ReceitaService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/receitas")
@@ -14,18 +26,28 @@ public class ReceitaController {
         this.service = service;
     }
 
+    @PostMapping
+    public ReceitaResponseDTO salvar(@RequestBody @Valid ReceitaRequestDTO dto) {
+        return service.salvar(dto);
+    }
+
     @GetMapping
-    public List<Receita> listarTodos() { return service.listarTodos(); }
+    public List<ReceitaResponseDTO> listarTodos() {
+        return service.listarTodos();
+    }
 
     @GetMapping("/{id}")
-    public Receita buscarPorId(@PathVariable Long id) { return service.buscarPorId(id).orElse(null); }
-
-    @PostMapping
-    public Receita salvar(@RequestBody Receita receita) { return service.salvar(receita); }
+    public ReceitaResponseDTO buscarPorId(@PathVariable Long id) {
+        return service.buscarPorId(id);
+    }
 
     @PutMapping("/{id}")
-    public Receita atualizar(@PathVariable Long id, @RequestBody Receita receita) { return service.atualizar(id, receita); }
+    public ReceitaResponseDTO atualizar(@PathVariable Long id, @RequestBody @Valid ReceitaRequestDTO dto) {
+        return service.atualizar(id, dto);
+    }
 
     @DeleteMapping("/{id}")
-    public boolean excluir(@PathVariable Long id) { return service.excluir(id); }
+    public String excluir(@PathVariable Long id) {
+        return service.excluir(id);
+    }
 }

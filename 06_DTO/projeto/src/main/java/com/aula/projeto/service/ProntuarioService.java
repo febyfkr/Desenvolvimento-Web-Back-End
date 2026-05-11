@@ -1,12 +1,16 @@
 package com.aula.projeto.service;
 
-import java.util.List;
-import java.util.Optional;
+import com.aula.projeto.dto.ProntuarioRequestDTO;
+import com.aula.projeto.dto.ProntuarioResponseDTO;
+import com.aula.projeto.model.Prontuario;
+import com.aula.projeto.repository.ProntuarioRepository;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.aula.projeto.entity.Prontuario;
-import com.aula.projeto.repository.ProntuarioRepository;
 
 @Service
 public class ProntuarioService {
@@ -16,26 +20,50 @@ public class ProntuarioService {
         this.repository = repository;
     }
 
-    public List<Prontuario> listarTodos() { return repository.findAll(); }
-
-    public Optional<Prontuario> buscarPorId(Long id) { return repository.findById(id); }
-
-    public Prontuario salvar(Prontuario prontuario) { return repository.save(prontuario); }
-
-    public Prontuario atualizar(Long id, Prontuario prontuario) {
-        return repository.findById(id).map(p -> {
-            p.setTipoSanguineo(prontuario.getTipoSanguineo());
-            p.setAlergia(prontuario.getAlergia());
-            p.setObservacoes(prontuario.getObservacoes());
-            return repository.save(p);
-        }).orElse(null);
+    private Prontuario toEntity(ProntuarioRequestDTO dto) {
+        Prontuario prontuario = new Prontuario();
+        prontuario.setTipoSanguineo(dto.getTipoSanguineo());
+        prontuario.setAlergia(dto.getAlergia());
+        prontuario.setObservacoes(dto.getObservacoes());
+        return prontuario;
     }
 
-    public boolean excluir(Long id) {
-        if(repository.existsById(id)) {
-            repository.deleteById(id);
-            return true;
-        }
-        return false;
+    private ProntuarioResponseDTO toDTO(Prontuario prontuario) {
+        return ProntuarioResponseDTO.builder()
+                .id(prontuario.getId())
+                .tipoSanguineo(prontuario.getTipoSanguineo())
+                .alergia(prontuario.getAlergia())
+                .observacoes(prontuario.getObservacoes())
+                .pacienteId(prontuario.getPaciente() != null ? prontuario.getPaciente().getId() : null)
+                .build();
+    }
+
+    public ProntuarioResponseDTO salvar(ProntuarioRequestDTO dto) {
+        return toDTO(repository.save(toEntity(dto)));
+    }
+
+    public List<ProntuarioResponseDTO> listarTodos() {
+        return repository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    public ProntuarioResponseDTO buscarPorId(Long id) {
+        return repository.findById(id).map(this::toDTO)
+                .orElseThrow(() -> new RuntimeException("Prontuário não encontrado"));
+    }
+
+    public ProntuarioResponseDTO atualizar(Long id, ProntuarioRequestDTO dto) {
+        Prontuario prontuario = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Prontuário não encontrado"));
+        prontuario.setTipoSanguineo(dto.getTipoSanguineo());
+        prontuario.setAlergia(dto.getAlergia());
+        prontuario.setObservacoes(dto.getObservacoes());
+        return toDTO(repository.save(prontuario));
+    }
+
+    public String excluir(Long id) {
+        Prontuario prontuario = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Prontuário não encontrado"));
+        repository.delete(prontuario);
+        return "Prontuário excluído com sucesso!";
     }
 }
