@@ -1,16 +1,14 @@
 package com.aula.projeto.service;
 
-import com.aula.projeto.dto.ProntuarioRequestDTO;
-import com.aula.projeto.dto.ProntuarioResponseDTO;
-import com.aula.projeto.model.Prontuario;
-import com.aula.projeto.repository.ProntuarioRepository;
-
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
+import com.aula.projeto.dto.ProntuarioRequestDTO;
+import com.aula.projeto.dto.ProntuarioResponseDTO;
 import com.aula.projeto.entity.Prontuario;
+import com.aula.projeto.repository.ProntuarioRepository;
 
 @Service
 public class ProntuarioService {

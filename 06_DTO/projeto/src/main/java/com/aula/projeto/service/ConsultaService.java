@@ -1,16 +1,14 @@
 package com.aula.projeto.service;
 
-import com.aula.projeto.dto.ConsultaRequestDTO;
-import com.aula.projeto.dto.ConsultaResponseDTO;
-import com.aula.projeto.model.Consulta;
-import com.aula.projeto.repository.ConsultaRepository;
-
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
+import com.aula.projeto.dto.ConsultaRequestDTO;
+import com.aula.projeto.dto.ConsultaResponseDTO;
 import com.aula.projeto.entity.Consulta;
+import com.aula.projeto.repository.ConsultaRepository;
 
 @Service
 public class ConsultaService {

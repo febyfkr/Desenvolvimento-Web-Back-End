@@ -1,16 +1,15 @@
 package com.aula.projeto.service;
 
-import com.aula.projeto.dto.MedicoRequestDTO;
-import com.aula.projeto.dto.MedicoResponseDTO;
-import com.aula.projeto.model.Medico;
-import com.aula.projeto.repository.MedicoRepository;
-
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
+import com.aula.projeto.config.RegraNegocioException;
+import com.aula.projeto.dto.MedicoRequestDTO;
+import com.aula.projeto.dto.MedicoResponseDTO;
 import com.aula.projeto.entity.Medico;
+import com.aula.projeto.repository.MedicoRepository;
 
 @Service
 public class MedicoService {
@@ -46,13 +45,14 @@ public class MedicoService {
     }
 
     public MedicoResponseDTO buscarPorId(Long id) {
-        return repository.findById(id).map(this::toDTO)
-                .orElseThrow(() -> new RuntimeException("Médico não encontrado"));
+        return repository.findById(id)
+                .map(this::toDTO)
+                .orElseThrow(() -> new RegraNegocioException("Médico não encontrado"));
     }
 
     public MedicoResponseDTO atualizar(Long id, MedicoRequestDTO dto) {
         Medico medico = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Médico não encontrado"));
+                .orElseThrow(() -> new RegraNegocioException("Médico não encontrado"));
         medico.setNome(dto.getNome());
         medico.setEspecialidade(dto.getEspecialidade());
         medico.setCrm(dto.getCrm());
@@ -61,8 +61,9 @@ public class MedicoService {
 
     public String excluir(Long id) {
         Medico medico = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Médico não encontrado"));
+                .orElseThrow(() -> new RegraNegocioException("Médico não encontrado"));
         repository.delete(medico);
         return "Médico excluído com sucesso!";
     }
+
 }

@@ -1,16 +1,14 @@
 package com.aula.projeto.service;
 
-import com.aula.projeto.dto.ReceitaRequestDTO;
-import com.aula.projeto.dto.ReceitaResponseDTO;
-import com.aula.projeto.model.Receita;
-import com.aula.projeto.repository.ReceitaRepository;
-
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
+import com.aula.projeto.dto.ReceitaRequestDTO;
+import com.aula.projeto.dto.ReceitaResponseDTO;
 import com.aula.projeto.entity.Receita;
+import com.aula.projeto.repository.ReceitaRepository;
 
 @Service
 public class ReceitaService {

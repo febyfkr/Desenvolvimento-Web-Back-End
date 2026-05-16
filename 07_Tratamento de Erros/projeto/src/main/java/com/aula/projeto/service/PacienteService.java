@@ -1,16 +1,15 @@
 package com.aula.projeto.service;
 
-import com.aula.projeto.dto.PacienteRequestDTO;
-import com.aula.projeto.dto.PacienteResponseDTO;
-import com.aula.projeto.model.Paciente;
-import com.aula.projeto.repository.PacienteRepository;
-
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
+import com.aula.projeto.config.RegraNegocioException;
+import com.aula.projeto.dto.PacienteRequestDTO;
+import com.aula.projeto.dto.PacienteResponseDTO;
 import com.aula.projeto.entity.Paciente;
+import com.aula.projeto.repository.PacienteRepository;
 
 @Service
 public class PacienteService {
@@ -47,13 +46,14 @@ public class PacienteService {
     }
 
     public PacienteResponseDTO buscarPorId(Long id) {
-        return repository.findById(id).map(this::toDTO)
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
-    }
+    return repository.findById(id)
+            .map(this::toDTO)
+            .orElseThrow(() -> new RegraNegocioException("Paciente não encontrado"));
+}
 
     public PacienteResponseDTO atualizar(Long id, PacienteRequestDTO dto) {
-        Paciente paciente = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+       Paciente paciente = repository.findById(id)
+               .orElseThrow(() -> new RegraNegocioException("Paciente não encontrado"));
         paciente.setNome(dto.getNome());
         paciente.setCpf(dto.getCpf());
         paciente.setTelefone(dto.getTelefone());
@@ -62,8 +62,9 @@ public class PacienteService {
 
     public String excluir(Long id) {
         Paciente paciente = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+                .orElseThrow(() -> new RegraNegocioException("Paciente não encontrado"));
         repository.delete(paciente);
         return "Paciente excluído com sucesso!";
-    }
+    }   
+
 }

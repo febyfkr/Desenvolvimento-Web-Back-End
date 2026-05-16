@@ -1,16 +1,15 @@
 package com.aula.projeto.service;
 
-import com.aula.projeto.dto.ProntuarioRequestDTO;
-import com.aula.projeto.dto.ProntuarioResponseDTO;
-import com.aula.projeto.model.Prontuario;
-import com.aula.projeto.repository.ProntuarioRepository;
-
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
+import com.aula.projeto.config.RegraNegocioException;
+import com.aula.projeto.dto.ProntuarioRequestDTO;
+import com.aula.projeto.dto.ProntuarioResponseDTO;
 import com.aula.projeto.entity.Prontuario;
+import com.aula.projeto.repository.ProntuarioRepository;
 
 @Service
 public class ProntuarioService {
@@ -47,13 +46,14 @@ public class ProntuarioService {
     }
 
     public ProntuarioResponseDTO buscarPorId(Long id) {
-        return repository.findById(id).map(this::toDTO)
-                .orElseThrow(() -> new RuntimeException("Prontuário não encontrado"));
+        return repository.findById(id)
+                .map(this::toDTO)
+                .orElseThrow(() -> new RegraNegocioException("Prontuário não encontrado"));
     }
 
     public ProntuarioResponseDTO atualizar(Long id, ProntuarioRequestDTO dto) {
         Prontuario prontuario = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Prontuário não encontrado"));
+                .orElseThrow(() -> new RegraNegocioException("Prontuário não encontrado"));
         prontuario.setTipoSanguineo(dto.getTipoSanguineo());
         prontuario.setAlergia(dto.getAlergia());
         prontuario.setObservacoes(dto.getObservacoes());
@@ -62,8 +62,9 @@ public class ProntuarioService {
 
     public String excluir(Long id) {
         Prontuario prontuario = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Prontuário não encontrado"));
+                .orElseThrow(() -> new RegraNegocioException("Prontuário não encontrado"));
         repository.delete(prontuario);
         return "Prontuário excluído com sucesso!";
     }
+
 }

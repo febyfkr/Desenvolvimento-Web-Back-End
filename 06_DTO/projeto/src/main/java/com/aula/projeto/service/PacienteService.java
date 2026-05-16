@@ -1,16 +1,14 @@
 package com.aula.projeto.service;
 
-import com.aula.projeto.dto.PacienteRequestDTO;
-import com.aula.projeto.dto.PacienteResponseDTO;
-import com.aula.projeto.model.Paciente;
-import com.aula.projeto.repository.PacienteRepository;
-
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
+import com.aula.projeto.dto.PacienteRequestDTO;
+import com.aula.projeto.dto.PacienteResponseDTO;
 import com.aula.projeto.entity.Paciente;
+import com.aula.projeto.repository.PacienteRepository;
 
 @Service
 public class PacienteService {

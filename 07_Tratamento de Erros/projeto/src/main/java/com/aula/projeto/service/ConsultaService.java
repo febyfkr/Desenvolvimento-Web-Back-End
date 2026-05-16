@@ -1,16 +1,15 @@
 package com.aula.projeto.service;
 
-import com.aula.projeto.dto.ConsultaRequestDTO;
-import com.aula.projeto.dto.ConsultaResponseDTO;
-import com.aula.projeto.model.Consulta;
-import com.aula.projeto.repository.ConsultaRepository;
-
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
+import com.aula.projeto.config.RegraNegocioException;
+import com.aula.projeto.dto.ConsultaRequestDTO;
+import com.aula.projeto.dto.ConsultaResponseDTO;
 import com.aula.projeto.entity.Consulta;
+import com.aula.projeto.repository.ConsultaRepository;
 
 @Service
 public class ConsultaService {
@@ -51,23 +50,25 @@ public class ConsultaService {
     }
 
     public ConsultaResponseDTO buscarPorId(Long id) {
-        return repository.findById(id).map(this::toDTO)
-                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
+        return repository.findById(id)
+                .map(this::toDTO)
+                .orElseThrow(() -> new RegraNegocioException("Consulta não encontrada"));
     }
 
     public ConsultaResponseDTO atualizar(Long id, ConsultaRequestDTO dto) {
         Consulta consulta = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
+                .orElseThrow(() -> new RegraNegocioException("Consulta não encontrada"));
         consulta.setDataHora(dto.getDataHora());
         consulta.setMotivo(dto.getMotivo());
         consulta.setValor(dto.getValor());
-        return toDTO(repository.save(consulta));
+        return toDTO(repository.save(consulta));    
     }
 
     public String excluir(Long id) {
         Consulta consulta = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
+                .orElseThrow(() -> new RegraNegocioException("Consulta não encontrada"));
         repository.delete(consulta);
         return "Consulta excluída com sucesso!";
     }
+
 }

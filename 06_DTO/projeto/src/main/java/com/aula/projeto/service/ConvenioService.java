@@ -1,16 +1,14 @@
 package com.aula.projeto.service;
 
-import com.aula.projeto.dto.ConvenioRequestDTO;
-import com.aula.projeto.dto.ConvenioResponseDTO;
-import com.aula.projeto.model.Convenio;
-import com.aula.projeto.repository.ConvenioRepository;
-
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
+import com.aula.projeto.dto.ConvenioRequestDTO;
+import com.aula.projeto.dto.ConvenioResponseDTO;
 import com.aula.projeto.entity.Convenio;
+import com.aula.projeto.repository.ConvenioRepository;
 
 @Service
 public class ConvenioService {

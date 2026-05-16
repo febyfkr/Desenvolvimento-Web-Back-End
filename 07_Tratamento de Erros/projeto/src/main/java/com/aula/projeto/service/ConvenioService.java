@@ -1,16 +1,15 @@
 package com.aula.projeto.service;
 
-import com.aula.projeto.dto.ConvenioRequestDTO;
-import com.aula.projeto.dto.ConvenioResponseDTO;
-import com.aula.projeto.model.Convenio;
-import com.aula.projeto.repository.ConvenioRepository;
-
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
+import com.aula.projeto.config.RegraNegocioException;
+import com.aula.projeto.dto.ConvenioRequestDTO;
+import com.aula.projeto.dto.ConvenioResponseDTO;
 import com.aula.projeto.entity.Convenio;
+import com.aula.projeto.repository.ConvenioRepository;
 
 @Service
 public class ConvenioService {
@@ -44,13 +43,14 @@ public class ConvenioService {
     }
 
     public ConvenioResponseDTO buscarPorId(Long id) {
-        return repository.findById(id).map(this::toDTO)
-                .orElseThrow(() -> new RuntimeException("Convênio não encontrado"));
+        return repository.findById(id)
+                .map(this::toDTO)
+                .orElseThrow(() -> new RegraNegocioException("Convênio não encontrado"));
     }
 
     public ConvenioResponseDTO atualizar(Long id, ConvenioRequestDTO dto) {
         Convenio convenio = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Convênio não encontrado"));
+                .orElseThrow(() -> new RegraNegocioException("Convênio não encontrado"));
         convenio.setNome(dto.getNome());
         convenio.setCnpj(dto.getCnpj());
         return toDTO(repository.save(convenio));
@@ -58,8 +58,9 @@ public class ConvenioService {
 
     public String excluir(Long id) {
         Convenio convenio = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Convênio não encontrado"));
+                .orElseThrow(() -> new RegraNegocioException("Convênio não encontrado"));
         repository.delete(convenio);
         return "Convênio excluído com sucesso!";
     }
+
 }
