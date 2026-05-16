@@ -1,0 +1,17 @@
+package com.aula.projeto.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class PacienteResponseDTO {
+    private Long id;
+    private String nome;
+    private String cpf;
+    private String telefone;
+}
