@@ -19,7 +19,7 @@ public class BeanController {
     }
 
     @GetMapping
-    public Paciente getPacienteBean() {
+    public Paciente getPacienteCompleto() {
         return pacienteBean;
     }
 }
